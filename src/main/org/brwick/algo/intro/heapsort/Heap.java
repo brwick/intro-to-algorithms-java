@@ -5,12 +5,12 @@ import java.lang.reflect.Array;
 /**
  * Created on 2/11/2016.
  */
-public class Heap<T> {
+public class Heap <T extends Comparable> {
 
-    private final T[] heapArray;
+    private final Comparable[] heapArray;
 
-    public Heap(int size) {
-        heapArray = (T[])new Object[size];
+    public Heap(Class<T> clazz, int size) {
+        heapArray = (T[])Array.newInstance(clazz, size);
     }
 
     public int parent(int i) {
@@ -20,16 +20,16 @@ public class Heap<T> {
         return i/2;
     }
 
-    public void insert(int index, T value) {
+    public void insert(int index, Comparable value) {
         heapArray[index - 1] = value;
     }
 
-    public T getRoot() {
+    public Comparable getRoot() {
         return heapArray[0];
     }
 
-    public T get(int index) {
-        return heapArray[index + 1];
+    public Comparable get(int index) {
+        return heapArray[index - 1];
     }
 
     public int getLeft(int index) {
