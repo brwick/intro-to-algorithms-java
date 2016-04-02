@@ -2,8 +2,9 @@ package org.brwick.algo.intro.heapsort;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.greaterThan;
 
 /**
  * Created on 3/11/16.
@@ -12,13 +13,13 @@ public class HeapUtilTest {
 
     @Test
     public void testSwap() throws Exception {
-        final Heap heap = createUnsortedMaxHeap();
+        final Heap heap = createUnsortedHeap();
         HeapUtil.swap(heap, 2, 5);
         assertThat(heap.get(2), is(7));
         assertThat(heap.get(5), is(4));
     }
 
-    private Heap createUnsortedMaxHeap() {
+    private Heap createUnsortedHeap() {
         final Heap<Integer> heap = new Heap(Integer.class, 10);
         heap.insert(1, 16);
         heap.insert(2, 4);
@@ -36,10 +37,22 @@ public class HeapUtilTest {
 
     @Test
     public void testMaxHeapify() throws Exception {
-        final Heap heap = createUnsortedMaxHeap();
+        final Heap heap = createUnsortedHeap();
         HeapUtil.maxHeapify(heap, 2);
         assertThat(heap.get(2), is(14));
         assertThat(heap.get(4), is(8));
         assertThat(heap.get(9), is(4));
+    }
+
+    @Test
+    public void testBuildMaxHeap() throws Exception {
+        final Heap heap = createUnsortedHeap();
+        HeapUtil.buildMaxHeap(heap);
+
+        for (int i=1; i<15/2; i++) {
+            assertThat((Integer)heap.get(i), is(greaterThan(heap.getLeft(i))));
+            assertThat((Integer)heap.get(i), is(greaterThan(heap.getRight(i))));
+        }
+
     }
 }
