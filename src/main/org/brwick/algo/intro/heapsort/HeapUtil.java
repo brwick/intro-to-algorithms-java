@@ -17,12 +17,6 @@ public class HeapUtil {
         return heap;
     }
 
-    public static void swap(Heap heap, int a, int b) {
-        final Comparable buffer = heap.get(a);
-        heap.insert(a, heap.get(b));
-        heap.insert(b, buffer);
-    }
-
     @VisibleForTesting
     static void maxHeapify(Heap heap, int index) {
         final int leftIndex = heap.getLeft(index);
@@ -42,5 +36,11 @@ public class HeapUtil {
             HeapUtil.swap(heap, index, largestNodeIndex);
             HeapUtil.maxHeapify(heap, largestNodeIndex);
         }
+    }
+
+    public static void swap(Heap heap, int a, int b) {
+        final Comparable buffer = heap.get(a);
+        heap.insert(a, heap.get(b));
+        heap.insert(b, buffer);
     }
 }

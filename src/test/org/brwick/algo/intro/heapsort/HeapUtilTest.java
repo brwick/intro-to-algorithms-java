@@ -49,9 +49,9 @@ public class HeapUtilTest {
         final Heap heap = createUnsortedHeap();
         HeapUtil.buildMaxHeap(heap);
 
-        for (int i=1; i<15/2; i++) {
-            assertThat((Integer)heap.get(i), is(greaterThan(heap.getLeft(i))));
-            assertThat((Integer)heap.get(i), is(greaterThan(heap.getRight(i))));
+        for (int i=1; i<heap.getSize()/2; i++) {
+            assertThat(heap.get(i), is(greaterThan(heap.get(heap.getLeft(i)))));
+            assertThat(heap.get(i), is(greaterThan(heap.get(heap.getRight(i)))));
         }
 
     }
