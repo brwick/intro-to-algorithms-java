@@ -9,6 +9,20 @@ public class HeapUtil {
 
     private HeapUtil() {}
 
+    public static Comparable[] heapSort(Heap heap) {
+        final Comparable[] sorted = new Comparable[heap.getSize()];
+        buildMaxHeap(heap);
+        int i = 0;
+        while (heap.getSize() > 0) {
+            swap(heap, 1, heap.getSize());
+            sorted[i] = heap.removeLastElement();
+            maxHeapify(heap, 1);
+            i++;
+        }
+
+        return sorted;
+    }
+
     public static Heap buildMaxHeap(Heap heap) {
         for (int i=heap.getSize()/2; i > 0; i--) {
             HeapUtil.maxHeapify(heap, i);

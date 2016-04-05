@@ -3,6 +3,7 @@ package org.brwick.algo.intro.heapsort;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.greaterThan;
 
@@ -28,7 +29,7 @@ public class HeapUtilTest {
         heap.insert(5, 7);
         heap.insert(6, 9);
         heap.insert(7, 3);
-        heap.insert(8, 2);
+        heap.insert(8, 7);
         heap.insert(9, 8);
         heap.insert(10, 1);
 
@@ -47,12 +48,32 @@ public class HeapUtilTest {
     @Test
     public void testBuildMaxHeap() throws Exception {
         final Heap heap = createUnsortedHeap();
-        HeapUtil.buildMaxHeap(heap);
+        final Heap maxedHeap = HeapUtil.buildMaxHeap(heap);
 
-        for (int i=1; i<heap.getSize()/2; i++) {
-            assertThat(heap.get(i), is(greaterThan(heap.get(heap.getLeft(i)))));
-            assertThat(heap.get(i), is(greaterThan(heap.get(heap.getRight(i)))));
+        for (int i=1; i<maxedHeap.getSize()/2; i++) {
+            assertThat(maxedHeap.get(i), is(greaterThan(maxedHeap.get(maxedHeap.getLeft(i)))));
+            assertThat(maxedHeap.get(i), is(greaterThan(maxedHeap.get(maxedHeap.getRight(i)))));
         }
+    }
 
+    @Test
+    public void testRemoveLastElement() throws Exception {
+        final Heap heap = createUnsortedHeap();
+        final int originalSize = heap.getSize();
+        final Comparable lastElem = heap.get(heap.getSize());
+        final Comparable removedElem = heap.removeLastElement();
+
+        assertThat(heap.getSize(), is(originalSize-1));
+        assertThat(lastElem, is(removedElem));
+    }
+
+    @Test
+    public void testHeapSort() throws Exception {
+        final Heap heap = createUnsortedHeap();
+        final Comparable[] sortedArray = HeapUtil.heapSort(heap);
+
+        for (int i=0; i < sortedArray.length-1; i++) {
+            assertThat(sortedArray[i], is(greaterThanOrEqualTo(sortedArray[i+1])));
+        }
     }
 }
