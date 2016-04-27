@@ -10,13 +10,14 @@ public class HeapUtil {
     private HeapUtil() {}
 
     public static Comparable[] heapSort(Heap heap) {
-        final Comparable[] sorted = new Comparable[heap.getSize()];
-        buildMaxHeap(heap);
+        final Heap unSortedHeap = heap.copy();
+        final Comparable[] sorted = new Comparable[unSortedHeap.getSize()];
+        buildMaxHeap(unSortedHeap);
         int i = 0;
-        while (heap.getSize() > 0) {
-            swap(heap, 1, heap.getSize());
-            sorted[i] = heap.removeLastElement();
-            maxHeapify(heap, 1);
+        while (unSortedHeap.getSize() > 0) {
+            swap(unSortedHeap, 1, unSortedHeap.getSize());
+            sorted[i] = unSortedHeap.removeLastElement();
+            maxHeapify(unSortedHeap, 1);
             i++;
         }
 
