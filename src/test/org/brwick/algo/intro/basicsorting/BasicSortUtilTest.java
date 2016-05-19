@@ -21,11 +21,7 @@ public class BasicSortUtilTest {
 
     @Test
     public void testMergeSort() throws Exception {
-        final int[] unsorted = createUnsortedArray(1000);
-
-        final int[] sorted = BasicSortUtil.mergeSort(unsorted);
-
-        validateSorted(sorted);
+        validateSorted(BasicSortUtil.mergeSort(createUnsortedArray(1000)));
     }
 
     private void validateSorted(int[] sorted) {
