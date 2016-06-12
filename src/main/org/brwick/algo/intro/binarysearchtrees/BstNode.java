@@ -1,5 +1,8 @@
 package org.brwick.algo.intro.binarysearchtrees;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.util.Objects;
 import java.util.Optional;
 
@@ -46,5 +49,38 @@ public class BstNode {
 
     public void setValue(int value) {
         this.value = value;
+    }
+
+    public void deleteLeftChild() {
+        this.leftChild = Optional.empty();
+    }
+
+    public void deleteRightChild() {
+        this.rightChild = Optional.empty();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(value)
+                .append(leftChild)
+                .append(rightChild)
+                .append(parent)
+                .toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof BstNode)) {
+            return false;
+        }
+
+        BstNode other = (BstNode)obj;
+        return new EqualsBuilder()
+                .append(value, other.getValue())
+                .append(leftChild, other.getLeftChild())
+                .append(rightChild, other.getRightChild())
+                .append(parent, other.getParent())
+                .isEquals();
     }
 }
