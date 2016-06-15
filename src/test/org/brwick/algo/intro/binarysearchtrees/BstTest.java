@@ -15,13 +15,13 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created on 6/4/16.
  */
-public class BstTest {
+public class BstTest extends BaseBstTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void testCheckInvariant() {
-        this.createBasicThreeNodeBst().checkTreeInvariant();
+        this.createBasicThreeNodeBst().checkBstRi();
     }
 
     @Test
@@ -33,7 +33,7 @@ public class BstTest {
         thrown.expect(IllegalStateException.class);
         thrown.expectMessage(Matchers.startsWith("Left child is greater"));
 
-        bst.checkTreeInvariant();
+        bst.checkBstRi();
     }
 
     @Test
@@ -41,7 +41,7 @@ public class BstTest {
         Bst bst = this.createBasicThreeNodeBst();
         bst.insert(new BstNode(15));
 
-        bst.checkTreeInvariant();
+        bst.checkBstRi();
         assertFalse(bst.getRoot().getLeftChild().get().getLeftChild().isPresent());
         assertTrue(bst.getRoot().getLeftChild().get().getRightChild().isPresent());
         assertTrue(bst.getRoot().getLeftChild().get().getRightChild().get().getParent().equals(bst.getRoot().getLeftChild()));
@@ -53,7 +53,7 @@ public class BstTest {
         Bst bst = this.createBasicThreeNodeBst();
         bst.insert(new BstNode(25));
 
-        bst.checkTreeInvariant();
+        bst.checkBstRi();
         assertTrue(bst.getRoot().getRightChild().get().getLeftChild().isPresent());
         assertFalse(bst.getRoot().getRightChild().get().getRightChild().isPresent());
         assertTrue(bst.getRoot().getRightChild().get().getLeftChild().get().getParent().equals(bst.getRoot().getRightChild()));
@@ -114,32 +114,57 @@ public class BstTest {
         assertThat(bst.findMax().getValue(), is(49));
     }
 
-    /**
-     * @return root: 20, left: 10, right: 30
-     */
-    private Bst createBasicThreeNodeBst() {
-        Bst bst = new Bst(20);
-        bst.getRoot().setLeftChild(new BstNode(10));
-        bst.getRoot().getLeftChild().get().setParent(bst.getRoot());
-        bst.getRoot().setRightChild(new BstNode(30));
-        bst.getRoot().getRightChild().get().setParent(bst.getRoot());
-
-        return bst;
+    @Test
+    public void testNextLarger_none() {
+        Bst bst = createSixNodeBst();
+        BstNode node = bst.getRoot().getRightChild().get().getRightChild().get();
+        Optional<BstNode> next = Bst.findNextLarger(node);
+        assertFalse(next.isPresent());
     }
 
-    /**
-     * @return                    49
-     *                  46                    79
-     *           43            x       64            83
-     */
-    private Bst createSixNodeBst() {
-        Bst bst = new Bst(49);
-        bst.insert(new BstNode(46));
-        bst.insert(new BstNode(79));
-        bst.insert(new BstNode(43));
-        bst.insert(new BstNode(64));
-        bst.insert(new BstNode(83));
-
-        return bst;
+    @Test
+    public void testNextLarger_rightSubTree() {
+        Bst bst = createSixNodeBst();
+        BstNode node = bst.getRoot().getRightChild().get();
+        Optional<BstNode> next = Bst.findNextLarger(node);
+        assertTrue(next.isPresent());
+        assertThat(next.get().getValue(), is(83));
     }
+
+    @Test
+    public void testNextLarger_leftSubTree() {
+        Bst bst = createSixNodeBst();
+        BstNode node = bst.getRoot().getLeftChild().get();
+        Optional<BstNode> next = Bst.findNextLarger(node);
+        assertTrue(next.isPresent());
+        assertThat(next.get().getValue(), is(49));
+    }
+
+    @Test
+    public void testNextSmaller_none() {
+        Bst bst = createSixNodeBst();
+        BstNode node = bst.getRoot().getLeftChild().get().getLeftChild().get();
+        Optional<BstNode> next = Bst.findNextSmaller(node);
+        assertFalse(next.isPresent());
+    }
+
+    @Test
+    public void testNextSmaller_rightSubTree() {
+        Bst bst = createSixNodeBst();
+        BstNode node = bst.getRoot().getRightChild().get();
+        Optional<BstNode> next = Bst.findNextSmaller(node);
+        assertTrue(next.isPresent());
+        assertThat(next.get().getValue(), is(64));
+    }
+
+    @Test
+    public void testNextSmaller_leftSubTree() {
+        Bst bst = createSixNodeBst();
+        BstNode node = bst.getRoot().getLeftChild().get();
+        Optional<BstNode> next = Bst.findNextSmaller(node);
+        assertTrue(next.isPresent());
+        assertThat(next.get().getValue(), is(43));
+    }
+
+    // TODO: write unit tests for deleteNode
 }

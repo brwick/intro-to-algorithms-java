@@ -5,8 +5,6 @@ import com.google.common.base.Preconditions;
 
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
 /**
  * Created on 6/4/16.
  */
@@ -17,8 +15,8 @@ public class Bst {
         root = new BstNode(rootValue);
     }
 
-    public void checkTreeInvariant() {
-        checkInvariant(root);
+    public void checkBstRi() {
+        checkBstNodeRi(root);
     }
 
     public Optional<BstNode> find(int value) {
@@ -47,7 +45,7 @@ public class Bst {
         return findMinValuedNode(root);
     }
 
-    private static BstNode findMinValuedNode(BstNode node) {
+    public static BstNode findMinValuedNode(BstNode node) {
         if (!node.getLeftChild().isPresent()) {
             return node;
         } else {
@@ -59,7 +57,7 @@ public class Bst {
         return findMaxValuedNode(root);
     }
 
-    private static BstNode findMaxValuedNode(BstNode node) {
+    public static BstNode findMaxValuedNode(BstNode node) {
         if (!node.getRightChild().isPresent()) {
             return node;
         } else {
@@ -75,7 +73,7 @@ public class Bst {
         }
     }
 
-    private void insertLeft(BstNode parentNode, BstNode nodeToInsert) {
+    private static void insertLeft(BstNode parentNode, BstNode nodeToInsert) {
         if (parentNode.getLeftChild().isPresent()) {
             BstNode leftChild = parentNode.getLeftChild().get();
             if (nodeToInsert.getValue() <= leftChild.getValue()) {
@@ -89,7 +87,7 @@ public class Bst {
         }
     }
 
-    private void insertRight(BstNode parentNode, BstNode nodeToInsert) {
+    private static void insertRight(BstNode parentNode, BstNode nodeToInsert) {
         if (parentNode.getRightChild().isPresent()) {
             BstNode rightChild = parentNode.getRightChild().get();
             if (nodeToInsert.getValue() <= rightChild.getValue()) {
@@ -103,23 +101,77 @@ public class Bst {
         }
     }
 
-    public static void checkInvariant(BstNode bstNode) {
+    public static void checkBstNodeRi(BstNode bstNode) {
         if (bstNode.getLeftChild().isPresent()) {
             Preconditions.checkState(bstNode.getLeftChild().get().getValue() <= bstNode.getValue(),
                     "Left child is greater (%s) than node (%s)", new String[]{Integer.toString(bstNode.getLeftChild().get().getValue()),
                             Integer.toString(bstNode.getValue())});
-            checkInvariant(bstNode.getLeftChild().get());
+            checkBstNodeRi(bstNode.getLeftChild().get());
         }
         if (bstNode.getRightChild().isPresent()) {
             Preconditions.checkState(bstNode.getRightChild().get().getValue() >= bstNode.getValue(),
                     "Right child is greater (%s) than node (%s)", new String[]{Integer.toString(bstNode.getRightChild().get().getValue()),
                             Integer.toString(bstNode.getValue())});
-            checkInvariant(bstNode.getRightChild().get());
+            checkBstNodeRi(bstNode.getRightChild().get());
         }
     }
 
     @VisibleForTesting
     BstNode getRoot() {
         return root;
+    }
+
+    public static Optional<BstNode> findNextLarger(BstNode node) {
+        if (node.getRightChild().isPresent()) {
+            return Optional.of(findMinValuedNode(node.getRightChild().get()));
+        } else {
+            BstNode current = node;
+            while (current.getParent().isPresent() && current.getParent().get().getRightChild().isPresent() &&
+                    current.equals(current.getParent().get().getRightChild().get())) {
+                current = current.getParent().get();
+            }
+            return current.getParent();
+        }
+    }
+
+    public static Optional<BstNode> findNextSmaller(BstNode node) {
+        if (node.getLeftChild().isPresent()) {
+            return Optional.of(findMaxValuedNode(node.getLeftChild().get()));
+        } else {
+            BstNode current = node;
+            while (current.getParent().isPresent() && current.getParent().get().getLeftChild().isPresent() &&
+                    current.equals(current.getParent().get().getLeftChild().get())) {
+                current = current.getParent().get();
+            }
+            return current.getParent();
+        }
+    }
+
+    public static void deleteNode(BstNode node) {
+        Preconditions.checkArgument(node.getParent().isPresent(), "Cannot delete root node of tree. Delete tree instead");
+
+        if (!node.getLeftChild().isPresent() && !node.getRightChild().isPresent()) {
+            if (isLeftChild(node.getParent().get(), node)) {
+                node.getParent().get().deleteLeftChild();
+            } {
+                node.getParent().get().deleteRightChild();
+            }
+        } else if (!node.getLeftChild().isPresent() || !node.getRightChild().isPresent()) {
+            if (isLeftChild(node.getParent().get(), node)) {
+                node.getParent().get().setLeftChild(node.getLeftChild().isPresent() ? node.getLeftChild().get() :
+                        node.getRightChild().get());
+            } else {
+                node.getParent().get().setRightChild(node.getLeftChild().isPresent() ? node.getLeftChild().get() :
+                        node.getRightChild().get());
+            }
+        } else {
+            Optional<BstNode> replacement = findNextLarger(node);
+            node.setValue(replacement.get().getValue());
+            deleteNode(replacement.get());
+        }
+    }
+
+    private static boolean isLeftChild(BstNode parent, BstNode child) {
+        return parent.getLeftChild().isPresent() && parent.getLeftChild().get().equals(child);
     }
 }
