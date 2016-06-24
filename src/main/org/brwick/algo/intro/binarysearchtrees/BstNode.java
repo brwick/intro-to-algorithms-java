@@ -11,6 +11,7 @@ import java.util.Optional;
  */
 public class BstNode {
     private int value;
+    private int height;
     private Optional<BstNode> leftChild = Optional.empty();
     private Optional<BstNode> rightChild = Optional.empty();
     private Optional<BstNode> parent = Optional.empty();
@@ -57,6 +58,14 @@ public class BstNode {
 
     public void deleteRightChild() {
         this.rightChild = Optional.empty();
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     @Override

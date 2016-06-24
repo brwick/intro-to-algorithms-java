@@ -165,6 +165,4 @@ public class BstTest extends BaseBstTest {
         assertTrue(next.isPresent());
         assertThat(next.get().getValue(), is(43));
     }
-
-    // TODO: write unit tests for deleteNode
 }
