@@ -1,20 +1,45 @@
 package org.brwick.algo.intro.binarysearchtrees;
 
+import org.brwick.algo.intro.avltrees.Avl;
+
 /**
  * Created on 6/15/16.
  */
-public class BaseBstTest {
+public class BinaryTreeFactory {
+    private BinaryTreeFactory() {}
+
     /**
      * @return root: 20, left: 10, right: 30
      */
-    protected Bst createBasicThreeNodeBst() {
+    public static Bst createBasicThreeNodeBst() {
         Bst bst = new Bst(20);
+        addTwoChildren(bst);
+
+        return bst;
+    }
+
+    private static void addTwoChildren(Bst bst) {
         bst.getRoot().setLeftChild(new BstNode(10));
         bst.getRoot().getLeftChild().get().setParent(bst.getRoot());
         bst.getRoot().setRightChild(new BstNode(30));
         bst.getRoot().getRightChild().get().setParent(bst.getRoot());
+    }
 
-        return bst;
+    public static Avl createBasicThreeNodeAvlWithoutHeights() {
+        Avl avl = new Avl(20);
+        addTwoChildren(avl);
+
+        return avl;
+    }
+
+    public static Avl createBasicThreeNodeAvl() {
+        Avl avl = new Avl(20);
+        addTwoChildren(avl);
+        avl.getRoot().setHeight(1);
+        avl.getRoot().getLeftChild().get().setHeight(0);
+        avl.getRoot().getRightChild().get().setHeight(0);
+
+        return avl;
     }
 
     /**
@@ -22,7 +47,7 @@ public class BaseBstTest {
      *                  46                    79
      *           43            x       64            83
      */
-    protected Bst createSixNodeBst() {
+    public static Bst createSixNodeBst() {
         Bst bst = new Bst(49);
         bst.insert(new BstNode(46));
         bst.insert(new BstNode(79));
@@ -40,7 +65,7 @@ public class BaseBstTest {
      *                      15   x
      *                     x 16 x x
      */
-    protected Bst createSevenNodeBst() {
+    public static Bst createSevenNodeBst() {
         Bst bst = new Bst(23);
         bst.insert(new BstNode(42));
         bst.insert(new BstNode(8));

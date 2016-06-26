@@ -25,4 +25,8 @@ public class Avl extends Bst {
     public static void updateHeight(BstNode node) {
         node.setHeight(Math.max(calcHeight(node.getLeftChild()), calcHeight(node.getRightChild())) + 1);
     }
+
+    public static void rebalance(Avl avl) {
+        return;
+    }
 }

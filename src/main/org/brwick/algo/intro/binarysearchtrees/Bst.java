@@ -116,8 +116,7 @@ public class Bst {
         }
     }
 
-    @VisibleForTesting
-    BstNode getRoot() {
+    public BstNode getRoot() {
         return root;
     }
 
