@@ -29,4 +29,40 @@ public class Avl extends Bst {
     public static void rebalance(Avl avl) {
         return;
     }
+
+    public static void leftRotate(Avl avl, BstNode node) {
+        final boolean replaceRoot = avl.getRoot().equals(node);
+        final BstNode newParent = node.getRightChild().orElse(null);
+
+        if (newParent != null) {
+            final BstNode newRightChild = newParent.getLeftChild().orElse(null);
+            if (newRightChild == null) {
+                node.deleteRightChild();
+            } else {
+                node.setRightChild(newRightChild);
+                newRightChild.setParent(node);
+            }
+
+            node.setParent(newParent);
+            newParent.setLeftChild(node);
+
+            avl.setRoot(newParent);
+        }
+    }
+
+    public static void rightRotate(BstNode node) {
+        final BstNode newParent = node.getLeftChild().orElse(null);
+        if (newParent != null) {
+            final BstNode newLeftChild = newParent.getRightChild().orElse(null);
+            if (newLeftChild == null) {
+                node.deleteLeftChild();;
+            } else {
+                node.setLeftChild(newLeftChild);
+                newLeftChild.setParent(node);
+            }
+
+            node.setParent(newParent);
+            newParent.setRightChild(node);
+        }
+    }
 }

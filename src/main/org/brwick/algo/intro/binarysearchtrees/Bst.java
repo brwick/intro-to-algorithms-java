@@ -120,6 +120,10 @@ public class Bst {
         return root;
     }
 
+    public void setRoot(BstNode root) {
+        this.root = root;
+    }
+
     public static Optional<BstNode> findNextLarger(BstNode node) {
         if (node.getRightChild().isPresent()) {
             return Optional.of(findMinValuedNode(node.getRightChild().get()));

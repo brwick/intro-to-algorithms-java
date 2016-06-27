@@ -42,6 +42,32 @@ public class BinaryTreeFactory {
         return avl;
     }
 
+    public static Avl createLeftRotateableAvl() {
+        Avl avl = createBasicThreeNodeAvl();
+        BstNode rightChild = avl.getRoot().getRightChild().get();
+        rightChild.setLeftChild(new BstNode(25));
+        rightChild.getLeftChild().get().setHeight(0);
+        rightChild.setRightChild(new BstNode(35));
+        rightChild.getRightChild().get().setHeight(0);
+        rightChild.setHeight(1);
+        avl.getRoot().getLeftChild().get().setHeight(1);
+        avl.getRoot().setHeight(2);
+
+        return avl;
+    }
+
+    public static Avl createLeftRotateableAvl_noLeftChild() {
+        Avl avl = createBasicThreeNodeAvl();
+        BstNode rightChild = avl.getRoot().getRightChild().get();
+        rightChild.setRightChild(new BstNode(35));
+        rightChild.getRightChild().get().setHeight(0);
+        rightChild.setHeight(1);
+        avl.getRoot().getLeftChild().get().setHeight(1);
+        avl.getRoot().setHeight(2);
+
+        return avl;
+    }
+
     /**
      * @return                    49
      *                  46                    79

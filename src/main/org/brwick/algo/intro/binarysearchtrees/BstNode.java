@@ -74,7 +74,6 @@ public class BstNode {
                 .append(value)
                 .append(leftChild)
                 .append(rightChild)
-                .append(parent)
                 .toHashCode();
     }
 
@@ -89,7 +88,6 @@ public class BstNode {
                 .append(value, other.getValue())
                 .append(leftChild, other.getLeftChild())
                 .append(rightChild, other.getRightChild())
-                .append(parent, other.getParent())
                 .isEquals();
     }
 }
